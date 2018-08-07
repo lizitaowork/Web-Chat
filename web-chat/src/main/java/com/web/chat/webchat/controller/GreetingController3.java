@@ -11,12 +11,8 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
-import java.util.Date;
-
 /**
- * Description:
- * Author: 杰明Jamin
- * Date: 2017/11/4 11:49
+ * Created by zitao.li on 2018/8/6.
  */
 @Controller
 public class GreetingController3 {
@@ -39,14 +35,14 @@ public class GreetingController3 {
 
         String sessionId = headerAccessor.getSessionId();
 
-        Greeting greeting = new Greeting(user.getName(), "sessionId: " + sessionId + ", message: " + message.getMessage());
+        Greeting greeting = new Greeting(user.getName(), message.getMessage());
 
         /*
          * 对目标进行发送信息
          */
         messagingTemplate.convertAndSendToUser(destUsername, "/demo3/greetings", greeting);
 
-        return new Greeting("系统", new Date().toString() + "消息已被推送。");
+        return new Greeting("友情提示", "消息发送成功");
     }
 
 }

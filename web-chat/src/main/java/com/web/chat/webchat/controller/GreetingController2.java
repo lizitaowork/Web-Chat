@@ -9,9 +9,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 /**
- * Description:
- * Author: 杰明Jamin
- * Date: 2017/11/4 11:49
+ * Created by zitao.li on 2018/8/6.
  */
 @Controller
 public class GreetingController2 {
@@ -24,7 +22,7 @@ public class GreetingController2 {
 
         String sessionId = headerAccessor.getSessionId();
 
-        return new Greeting(user.getName(), "sessionId: " + sessionId + ", message: " + message.getMessage());
+        return new Greeting(user.getName(), message.getMessage());
     }
 
 }

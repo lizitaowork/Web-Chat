@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello WebSocket</title>
-    <link href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/main.css" rel="stylesheet">
-    <script src="/js/jquery-3.3.1.js"></script>
-    <script src="/js/sock.min.js"></script>
-    <script src="/js/stomp.js"></script>
+    <link href="/app/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/app/css/main.css" rel="stylesheet">
+    <script src="/app/js/jquery-3.3.1.js"></script>
+    <script src="/app/js/sock.min.js"></script>
+    <script src="/app/js/stomp.js"></script>
 
     <script type="text/javascript">
         var stompClient = null;
@@ -28,17 +28,18 @@
             var socket = new SockJS('/webSocket/webSocketEndPoint');
             // var socket = new WebSocket('/webSocket/webSocketEndPoint');
             stompClient = Stomp.over(socket);
-            var headers={
-                username:$("#username").val(),
-                password:$("#password").val()
+            var headers = {
+                username: $("#username").val(),
+                password: $("#password").val()
             };
             stompClient.connect(headers, function (frame) {
                 setConnected(true);
                 console.log('Connected: ' + frame);
-                stompClient.subscribe('/topic/demo2/greetings', function (greeting) {
+                stompClient.subscribe('/user/' + $("#username").val() + '/demo3/greetings', function (greeting) {
                     showGreeting(JSON.parse(greeting.body).userId, JSON.parse(greeting.body).content);
                 });
             });
+
         }
 
         function disconnect() {
@@ -50,11 +51,11 @@
         }
 
         function sendName() {
-            stompClient.send("/app/demo2/hello/10086", {}, JSON.stringify({'message': $("#message").val()}));
+            stompClient.send("/app/demo3/hello/" + $("#destUsername").val(), {}, JSON.stringify({'message': $("#message").val()}));
         }
 
         function showGreeting(userId, message) {
-            $("#greetings").append("<tr><td> Hi, 这是来自 " + userId + " 的消息: " + message + "</td></tr>");
+            $("#greetings").append("<tr><td> " + userId + ": " + message + "</td></tr>");
         }
 
         $(function () {
@@ -72,11 +73,6 @@
             });
         });
     </script>
-    <!--
-    <script src="http://cdn.bootcss.com/sockjs-client/1.1.1/sockjs.min.js"></script>
-    <script src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.js"></script>
-    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
-    -->
 </head>
 <body>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
@@ -105,8 +101,12 @@
         <div class="col-md-12">
             <form class="form-inline">
                 <div class="form-group">
+                    <label for="destUsername">发送到：</label>
+                    <input type="text" id="destUsername" class="form-control" placeholder="destinationUsername">
+                </div>
+                <div class="form-group">
                     <label for="message">消息：</label>
-                    <input type="text" id="message" class="form-control" placeholder="请输入...">
+                    <input type="text" id="message" class="form-control" placeholder="message">
                 </div>
                 <button id="send" class="btn btn-default" type="submit">发送</button>
             </form>
@@ -117,7 +117,7 @@
             <table id="conversation" class="table table-striped">
                 <thead>
                 <tr>
-                    <th>来自服务器的群发信息：</th>
+                    <th>好友消息：</th>
                 </tr>
                 </thead>
                 <tbody id="greetings">

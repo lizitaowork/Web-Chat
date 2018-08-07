@@ -2,7 +2,6 @@ package com.web.chat.webchat.websocket;
 
 import com.web.chat.webchat.model.Authentication;
 import com.web.chat.webchat.model.Users;
-import org.apache.catalina.User;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
